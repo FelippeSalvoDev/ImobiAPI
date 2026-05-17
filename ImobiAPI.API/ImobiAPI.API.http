@@ -1,0 +1,6 @@
+@ImobiAPI.API_HostAddress = http://localhost:5023
+
+GET {{ImobiAPI.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
