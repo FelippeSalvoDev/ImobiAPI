@@ -13,7 +13,12 @@ public class Municipio
     public DateTime AtualizadoEm { get; private set; }
     public AliquotaITBI? AliquotaITBI { get; private set; }
 
-    protected Municipio() { }
+    protected Municipio()
+    {
+        CodigoIBGE = null!;
+        Nome = null!;
+        UF = null!;
+    }
 
     public Municipio(string codigoIBGE, string nome, string uf, int? populacao = null)
     {

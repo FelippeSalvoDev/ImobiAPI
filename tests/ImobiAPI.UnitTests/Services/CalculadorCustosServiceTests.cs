@@ -69,7 +69,7 @@ public class CalculadorCustosServiceTests
     }
 
     [Fact]
-    public void Calcular_DeveRetornarITBIZero_QuandoImóvelDentroDoLimiteDeIsencao()
+    public void Calcular_DeveRetornarITBIZero_QuandoImovelDentroDoLimiteDeIsencao()
     {
         var municipio = CriarMunicipioComAliquota(aliquota: 3, limiteIsencao: 200000);
         var escritura = CriarTabelaSimples(TipoAto.Escritura, 5000);
