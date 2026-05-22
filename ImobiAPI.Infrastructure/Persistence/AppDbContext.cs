@@ -1,5 +1,7 @@
 using ImobiAPI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using ImobiAPI.Infrastructure.Persistence.Seeds;
+
 
 namespace ImobiAPI.Infrastructure.Persistence;
 
@@ -15,6 +17,7 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        CapitaisSeeder.Seed(modelBuilder);
         base.OnModelCreating(modelBuilder);
     }
 }
