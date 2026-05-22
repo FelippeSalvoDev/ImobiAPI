@@ -30,6 +30,7 @@ public class MunicipioRepository : IMunicipioRepository
     public async Task<IEnumerable<Municipio>> ListarSuportadosAsync()
     {
         return await _context.Municipios
+            .Include(m => m.AliquotaITBI)
             .Where(m => m.Suportado)
             .OrderBy(m => m.Nome)
             .ToListAsync();
