@@ -20,6 +20,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(
 
 builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
+builder.Services.AddScoped<IApiKeyRepository, ApiKeyRepository>();
 builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
 builder.Services.AddScoped<ITabelaEmolumentosRepository, TabelaEmolumentosRepository>();
 

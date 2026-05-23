@@ -24,38 +24,23 @@ public class CalcularCustosUseCase
 
     public async Task<CalcularCustosResponse> ExecutarAsync(CalcularCustosRequest request)
     {
-        var municipio = await _cacheService.ObterAsync<Domain.Entities.Municipio>($"municipio:{request.CodigoIBGE}");
+        var cacheKey = $"calculo:{request.CodigoIBGE}:{request.ValorImovel}:{request.Financiado}";
+        var cached = await _cacheService.ObterAsync<CalcularCustosResponse>(cacheKey);
 
-        if (municipio is null)
-        {
-            municipio = await _municipioRepository.ObterPorCodigoIBGEAsync(request.CodigoIBGE)
-                ?? throw new KeyNotFoundException($"Município com código IBGE {request.CodigoIBGE} não encontrado.");
+        if (cached is not null)
+            return cached;
 
-            await _cacheService.SalvarAsync($"municipio:{request.CodigoIBGE}", municipio);
-        }
+        var municipio = await _municipioRepository.ObterPorCodigoIBGEAsync(request.CodigoIBGE)
+            ?? throw new KeyNotFoundException($"Município com código IBGE {request.CodigoIBGE} não encontrado.");
 
         if (!municipio.Suportado)
             throw new InvalidOperationException($"Município {municipio.Nome} ainda não tem dados cadastrados.");
 
-        var tabelaEscritura = await _cacheService.ObterAsync<Domain.Entities.TabelaEmolumentos>($"tabela:{municipio.UF}:Escritura");
+        var tabelaEscritura = await _tabelaEmolumentosRepository.ObterPorUFETipoAsync(municipio.UF, TipoAto.Escritura)
+            ?? throw new InvalidOperationException($"Tabela de emolumentos de escritura não encontrada para {municipio.UF}.");
 
-        if (tabelaEscritura is null)
-        {
-            tabelaEscritura = await _tabelaEmolumentosRepository.ObterPorUFETipoAsync(municipio.UF, TipoAto.Escritura)
-                ?? throw new InvalidOperationException($"Tabela de emolumentos de escritura não encontrada para {municipio.UF}.");
-
-            await _cacheService.SalvarAsync($"tabela:{municipio.UF}:Escritura", tabelaEscritura);
-        }
-
-        var tabelaRegistro = await _cacheService.ObterAsync<Domain.Entities.TabelaEmolumentos>($"tabela:{municipio.UF}:Registro");
-
-        if (tabelaRegistro is null)
-        {
-            tabelaRegistro = await _tabelaEmolumentosRepository.ObterPorUFETipoAsync(municipio.UF, TipoAto.Registro)
-                ?? throw new InvalidOperationException($"Tabela de emolumentos de registro não encontrada para {municipio.UF}.");
-
-            await _cacheService.SalvarAsync($"tabela:{municipio.UF}:Registro", tabelaRegistro);
-        }
+        var tabelaRegistro = await _tabelaEmolumentosRepository.ObterPorUFETipoAsync(municipio.UF, TipoAto.Registro)
+            ?? throw new InvalidOperationException($"Tabela de emolumentos de registro não encontrada para {municipio.UF}.");
 
         var resultado = _calculadorCustosService.Calcular(
             municipio,
@@ -64,7 +49,7 @@ public class CalcularCustosUseCase
             tabelaEscritura,
             tabelaRegistro);
 
-        return new CalcularCustosResponse(
+        var response = new CalcularCustosResponse(
             Municipio: municipio.Nome,
             UF: municipio.UF,
             ValorImovel: resultado.ValorImovel,
@@ -75,5 +60,9 @@ public class CalcularCustosUseCase
             TotalCustos: resultado.TotalCustos,
             PercentualSobreImovel: resultado.PercentualSobreImovel,
             Isento: resultado.Isento);
+
+        await _cacheService.SalvarAsync(cacheKey, response);
+
+        return response;
     }
 }
