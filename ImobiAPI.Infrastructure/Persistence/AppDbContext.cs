@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
     public DbSet<AliquotaITBI> AliquotasITBI => Set<AliquotaITBI>();
     public DbSet<TabelaEmolumentos> TabelasEmolumentos => Set<TabelaEmolumentos>();
     public DbSet<FaixaEmolumento> FaixasEmolumentos => Set<FaixaEmolumento>();
+    public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
+    public DbSet<UsoApiKey> UsoApiKeys => Set<UsoApiKey>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

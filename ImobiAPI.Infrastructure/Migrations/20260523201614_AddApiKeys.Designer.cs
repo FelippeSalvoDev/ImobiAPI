@@ -3,6 +3,7 @@ using System;
 using ImobiAPI.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ImobiAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523201614_AddApiKeys")]
+    partial class AddApiKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -883,39 +886,6 @@ namespace ImobiAPI.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ImobiAPI.Domain.Entities.UsoApiKey", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("ApiKeyId")
-                        .HasColumnType("integer")
-                        .HasColumnName("api_key_id");
-
-                    b.Property<DateTime>("CriadoEm")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("criado_em");
-
-                    b.Property<string>("Endpoint")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("endpoint");
-
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("status_code");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApiKeyId", "CriadoEm");
-
-                    b.ToTable("uso_api_keys", (string)null);
-                });
-
             modelBuilder.Entity("ImobiAPI.Domain.Entities.AliquotaITBI", b =>
                 {
                     b.HasOne("ImobiAPI.Domain.Entities.Municipio", null)
@@ -1011,15 +981,6 @@ namespace ImobiAPI.Infrastructure.Migrations
                         });
 
                     b.Navigation("CodigoIBGE")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ImobiAPI.Domain.Entities.UsoApiKey", b =>
-                {
-                    b.HasOne("ImobiAPI.Domain.Entities.ApiKey", null)
-                        .WithMany()
-                        .HasForeignKey("ApiKeyId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
