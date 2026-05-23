@@ -3,15 +3,22 @@ using ImobiAPI.Application.Interfaces;
 using ImobiAPI.Application.UseCases.CalcularCustos;
 using ImobiAPI.Application.UseCases.ConsultarMunicipio;
 using ImobiAPI.Domain.Services;
+using ImobiAPI.Infrastructure.Cache;
 using ImobiAPI.Infrastructure.Persistence;
 using ImobiAPI.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(
+    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis")!));
+
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
 
 builder.Services.AddScoped<IMunicipioRepository, MunicipioRepository>();
 builder.Services.AddScoped<ITabelaEmolumentosRepository, TabelaEmolumentosRepository>();
