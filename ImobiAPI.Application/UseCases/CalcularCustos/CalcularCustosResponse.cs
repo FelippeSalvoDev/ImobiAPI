@@ -6,9 +6,12 @@ public record CalcularCustosResponse(
     decimal ValorImovel,
     decimal ValorITBI,
     decimal AliquotaITBI,
+    string FonteLegalITBI,
+    int AnoVigenciaITBI,
     decimal ValorEscritura,
     decimal ValorRegistro,
     decimal TotalCustos,
     decimal PercentualSobreImovel,
-    bool Isento
+    bool Isento,
+    bool Financiado
 );
