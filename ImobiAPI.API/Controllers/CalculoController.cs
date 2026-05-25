@@ -1,3 +1,4 @@
+using ImobiAPI.Application.DTOs;
 using ImobiAPI.Application.UseCases.CalcularCustos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,15 +21,15 @@ public class CalculoController : ControllerBase
         try
         {
             var resultado = await _useCase.ExecutarAsync(request);
-            return Ok(resultado);
+            return Ok(ApiResponse<CalcularCustosResponse>.Ok(resultado));
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new { erro = ex.Message });
+            return NotFound(ApiResponse<CalcularCustosResponse>.Falha("IM001", ex.Message));
         }
         catch (InvalidOperationException ex)
         {
-            return UnprocessableEntity(new { erro = ex.Message });
+            return UnprocessableEntity(ApiResponse<CalcularCustosResponse>.Falha("IM002", ex.Message));
         }
     }
 }

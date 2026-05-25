@@ -1,3 +1,4 @@
+using ImobiAPI.Application.DTOs;
 using ImobiAPI.Application.UseCases.ConsultarMunicipio;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,6 @@ public class MunicipioController : ControllerBase
     public async Task<IActionResult> Listar()
     {
         var resultado = await _useCase.ExecutarAsync();
-        return Ok(resultado);
+        return Ok(ApiResponse<IEnumerable<ConsultarMunicipioResponse>>.Ok(resultado));
     }
 }
