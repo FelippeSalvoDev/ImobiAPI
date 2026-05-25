@@ -55,11 +55,14 @@ public class CalcularCustosUseCase
             ValorImovel: resultado.ValorImovel,
             ValorITBI: resultado.ValorITBI,
             AliquotaITBI: resultado.AliquotaITBI,
+            FonteLegalITBI: municipio.AliquotaITBI!.FonteLegal,
+            AnoVigenciaITBI: municipio.AliquotaITBI!.AnoVigencia,
             ValorEscritura: resultado.ValorEscritura,
             ValorRegistro: resultado.ValorRegistro,
             TotalCustos: resultado.TotalCustos,
             PercentualSobreImovel: resultado.PercentualSobreImovel,
-            Isento: resultado.Isento);
+            Isento: resultado.Isento,
+            Financiado: request.Financiado);
 
         await _cacheService.SalvarAsync(cacheKey, response);
 
