@@ -1,3 +1,4 @@
+using ImobiAPI.Application.DTOs;
 using ImobiAPI.Application.Interfaces;
 using ImobiAPI.Domain.Entities;
 using ImobiAPI.Infrastructure.Persistence;
@@ -28,7 +29,7 @@ public class ApiKeyMiddleware
         if (!context.Request.Headers.TryGetValue(ApiKeyHeader, out var chave))
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsJsonAsync(new { erro = "API Key não informada." });
+            await context.Response.WriteAsJsonAsync(ApiResponse<object>.Falha("IM006", "API Key não informada."));
             return;
         }
 
@@ -38,7 +39,7 @@ public class ApiKeyMiddleware
         if (apiKey is null)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            await context.Response.WriteAsJsonAsync(new { erro = "API Key inválida." });
+            await context.Response.WriteAsJsonAsync(ApiResponse<object>.Falha("IM005", "API Key inválida."));
             return;
         }
 
@@ -47,7 +48,7 @@ public class ApiKeyMiddleware
         if (!apiKey.PodeRealizarChamada(totalHoje))
         {
             context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-            await context.Response.WriteAsJsonAsync(new { erro = $"Limite diário de {apiKey.LimiteDiario} requisições atingido." });
+            await context.Response.WriteAsJsonAsync(ApiResponse<object>.Falha("IM007", $"Limite diário de {apiKey.LimiteDiario} requisições atingido."));
             return;
         }
 
