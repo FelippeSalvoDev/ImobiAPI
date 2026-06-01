@@ -26,6 +26,9 @@ public class ApiKeyConfiguration : IEntityTypeConfiguration<ApiKey>
             .HasMaxLength(20)
             .IsRequired();
 
+        builder.Property(a => a.UsuarioId)
+       .HasColumnName("usuario_id");
+
         builder.Property(a => a.LimiteDiario)
             .HasColumnName("limite_diario")
             .IsRequired();
