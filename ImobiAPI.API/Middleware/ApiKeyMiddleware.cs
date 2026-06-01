@@ -20,7 +20,8 @@ public class ApiKeyMiddleware
         if (context.Request.Path.StartsWithSegments("/swagger") ||
              context.Request.Path.StartsWithSegments("/scalar") ||
              context.Request.Path.StartsWithSegments("/openapi") ||
-             context.Request.Path.StartsWithSegments("/v1/api-keys"))
+             context.Request.Path.StartsWithSegments("/v1/api-keys") ||
+            context.Request.Path.StartsWithSegments("/v1/auth"))
         {
             await _next(context);
             return;
