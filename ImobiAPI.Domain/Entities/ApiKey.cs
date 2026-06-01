@@ -7,6 +7,7 @@ public class ApiKey
     public int Id { get; private set; }
     public string Chave { get; private set; }
     public string Email { get; private set; }
+    public int? UsuarioId { get; private set; }
     public string Plano { get; private set; }
     public int LimiteDiario { get; private set; }
     public bool Ativa { get; private set; }
